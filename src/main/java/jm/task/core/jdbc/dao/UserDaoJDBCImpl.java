@@ -62,7 +62,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
 
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         try {
             preparedStatement = connection.prepareStatement(REMOVE);
             preparedStatement.setLong(1, id);
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
