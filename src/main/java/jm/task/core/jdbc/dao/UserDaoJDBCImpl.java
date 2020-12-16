@@ -86,7 +86,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         try {
             preparedStatement = connection.prepareStatement(REMOVE);
             preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,23 +143,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void cleanUsersTable() {
-        Connection connection = getConnection();
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(DELETE_ALL);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if(statement !=null){
-                    statement.close();
-                }
-                if(connection!=null){
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        actionOnTable(DELETE_ALL);
     }
 }
