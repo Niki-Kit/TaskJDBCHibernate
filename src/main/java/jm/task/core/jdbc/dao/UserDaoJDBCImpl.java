@@ -15,21 +15,14 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     PreparedStatement preparedStatement = null;
     Statement statement = null;
-    private static final String CREATE = "CREATE TABLE IF NOT EXISTS User (Id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
-            "name VARCHAR(30), lastname VARCHAR(30), age INT(3))";
-    private static final String DROP = "DROP TABLE IF EXISTS User";
-    private static final String ADD = "INSERT INTO User (name, lastname, age) VALUES (?,?,?)";
-    private static final String REMOVE = "DELETE FROM User WHERE Id = ?";
-    private static final String SELECT = "SELECT * FROM User";
-    private static final String DELETE_ALL = "DELETE FROM User";
-
 
     public void createUsersTable() {
-        actionOnTable(CREATE);
+        actionOnTable("CREATE TABLE IF NOT EXISTS User (Id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
+                "name VARCHAR(30), lastname VARCHAR(30), age INT(3))");
     }
 
     public void dropUsersTable() {
-        actionOnTable(DROP);
+        actionOnTable("DROP TABLE IF EXISTS User");
     }
 
     private void actionOnTable(String drop) {
@@ -57,8 +50,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         Connection connection = getConnection();
         try {
-            preparedStatement = connection.prepareStatement(ADD);
-
+            preparedStatement = connection.prepareStatement("INSERT INTO User (name, lastname, age) VALUES (?,?,?)");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
@@ -84,7 +76,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void removeUserById(long id) {
         Connection connection = getConnection();
         try {
-            preparedStatement = connection.prepareStatement(REMOVE);
+            preparedStatement = connection.prepareStatement("DELETE FROM User WHERE Id = ?");
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
 
@@ -110,7 +102,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM User");
 
             while(resultSet.next()) {
                 User user = new User();
@@ -143,6 +135,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void cleanUsersTable() {
-        actionOnTable(DELETE_ALL);
+        actionOnTable("DELETE FROM User");
     }
 }
